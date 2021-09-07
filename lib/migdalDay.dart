@@ -86,9 +86,11 @@ class DateJP{
     if(isLeap){
       this._daysOfMonth[1]=29;
     }
-    //1間隔1～12のリストを生成、各月までの月の日数の和、DateJP.fromCumDays
+    //1間隔1～12のリストを生成、各月までの月の日数の和、年内累積日数以上の和のみを抽出し個数を数える
     int backLen = List<int>.generate(12, (int x)=>x+1).map((int x)=>this.sumDaysOfManthes(x)).where((int sum)=>sum >= cumDays).toList().length;
+    //年の月数12に+1した13から先の個数を減じたものが求めたかった月部分
     this._month = 13 - backLen;
+    //月が分かったので月と年内累積日数から日を算出
     if(this._month==1){
       this._day = cumDays;
     }else{
