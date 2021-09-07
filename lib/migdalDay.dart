@@ -3,15 +3,15 @@ void main(List<String> args){
   List<String> param = args.where((String arg)=> arg.startsWith("-")).toList();
   if(param.length > 0){
     //フラグがある場合はフラグごとの挙動
-    print("running with ${param.length} params\n\n${param}\n\n");
+    print("running with ${param.length} params\n${param}\n");
     if(args.contains("-test")){
       //-testフラグでtest running
-      print("test running\n\n");
+      print("test running\n");
       test_MDD();
     }
   }else{
     //フラグがない場合はメインルーチン
-    print("running with no param\n\n");
+    print("running with no param\n");
     mainLT();
   }
 }
@@ -28,6 +28,7 @@ void mainLT(){
   int migdalCumDaysMean = (migdalCumDays.reduce((int curr, int next) => curr + next) / migdalCumDays.length).ceil();
   //累積日数からコンストラクトし日付表記の文字列へ
   String migdalDaysMean = (DateJP.fromCumDays(migdalCumDaysMean)).toString();
+  print(migdalDaysMean);
 }
 //日本式の日付表記と年内累積日数に関するクラス
 //年内累積日数の定義：n月m日のときn-1月までの日数の和＋m
@@ -85,16 +86,14 @@ class DateJP{
     if(isLeap){
       this._daysOfMonth[1]=29;
     }
-    //各月DateJP.fromCumDays
-    int backLen = (List<int>.generate(12, (int x)=>x+1).map((int days)=>this._daysOfMonth.indexOf(days)).map((int id)=>this._daysOfMonth.take(id+1).toList())).map((List<int> days){
-      if(days.length > 0){
-        days.reduce((int curr, int next) => curr + next);
-      }else{
-        return 0;
-      }
-    }).where((int sum)=>sum >= cumDays).toList().length;
-    int monthID = 12 - backLen;
-    print(backLen);
+    //1間隔1～12のリストを生成、各月までの月の日数の和、DateJP.fromCumDays
+    int backLen = List<int>.generate(12, (int x)=>x+1).map((int x)=>this.sumDaysOfManthes(x)).where((int sum)=>sum >= cumDays).toList().length;
+    this._month = 13 - backLen;
+    if(this._month==1){
+      this._day = cumDays;
+    }else{
+      this._day = cumDays - this.sumDaysOfManthes(this._month - 1);
+    }
   }
   //年内累積日数を算出
   int cumDays(){
@@ -105,6 +104,14 @@ class DateJP{
       return this._day;
     }
   }
+  //全月分の月の日数の和
+  int sumDaysOfManthesAll() => this.listDaysOfManthesAll().reduce((int curr, int next) => curr + next);
+  //x月までの月の日数の和
+  int sumDaysOfManthes(int x) => this.listDaysOfManthes(x).reduce((int curr, int next) => curr + next);
+  //全月分の月の日数のリスト
+  List<int> listDaysOfManthesAll() => this._daysOfMonth;
+  //x月までの月の日数のリスト
+  List<int> listDaysOfManthes(int x) => this._daysOfMonth.take(x).toList();
   //文字列表記へ
   @override
   String toString() {
@@ -114,7 +121,8 @@ class DateJP{
 //テスト
 void test_MDD(){
   print("This is Test!\n\n");
-  DateJP migd = DateJP.fromString("3/1");
+  DateJP migd = DateJP.fromString("12/1");
   DateJP migd2 = DateJP.fromCumDays(migd.cumDays());
+  List<DateJP> migdL = List<int>.generate(12, (int x)=>x+1).map((int x)=>DateJP.fromCumDays(DateJP.fromString("$x/1").cumDays())).toList();
   //print(migd2);
 }
