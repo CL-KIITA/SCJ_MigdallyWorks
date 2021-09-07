@@ -72,12 +72,17 @@ class DateJP{
     if(isLeap){
       this._daysOfMonth[1]=29;
     }
-    int backLen = this._daysOfMonth.map((int days)=>this._daysOfMonth.indexOf(days)).map((int id)=>this._daysOfMonth.take(id)).map((List<int> days)=> days.reduce((int curr, int next) => curr + next)).where((int sum)=>sum >= cumDays).toList().length;
+    int backLen = this._daysOfMonth.map((int days)=>this._daysOfMonth.indexOf(days)).map((int id)=>this._daysOfMonth.take(id+1)).map((List<int> days)=> days.reduce((int curr, int next) => curr + next)).where((int sum)=>sum >= cumDays).toList().length;
     int monthID = 12 - backLen;
     print(monthID+1);
   }
   int cumDays(){
-    return this._daysOfMonth.take(this._month).reduce((int curr, int next) => curr + next) + this._day;
+    List<int> backDays = this._daysOfMonth.take(this._month-1);
+    if(backDays.length > 0){
+    return backDays.reduce((int curr, int next) => curr + next) + this._day;
+    }else{
+      return this._day;
+    }
   }
   @override
   String toString() {
@@ -87,7 +92,7 @@ class DateJP{
 
 void test_MDD(){
   print("This is Test!\n\n");
-  DateJP migd = new DateJP.fromString("6/18");
+  DateJP migd = new DateJP.fromString("1/1");
   DateJP migd2 = new DateJP.fromCumDays(migd.cumDays());
-  print(migd2);
+  print(migd);
 }
