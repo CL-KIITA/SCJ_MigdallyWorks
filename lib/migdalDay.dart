@@ -1,7 +1,13 @@
 void main(List<String> args){
-  if(args.contains("-test")){
-    test_MDD();
+  List<String> param = args.where((String arg)=> arg.startsWith("-")).toList();
+  if(param.length > 0){
+    print("running with ${param.length} params\n\n${param}\n\n");
+    if(args.contains("-test")){
+      print("test running\n\n");
+      test_MDD();
+    }
   }else{
+    print("running with no param\n\n");
     mainLT();
   }
 }
@@ -66,7 +72,7 @@ class DateJP{
     if(isLeap){
       this._daysOfMonth[1]=29;
     }
-    int backLen = this._daysOfMonth.map((int days)=>this._daysOfMonth.indexOf(days)).map((int id)=>this._daysOfMonth.take(id)).map((List<int> days)=> days.reduce((int curr, int next) => curr + next)).where((int sum)=>sum >= cumDays).length;
+    int backLen = this._daysOfMonth.map((int days)=>this._daysOfMonth.indexOf(days)).map((int id)=>this._daysOfMonth.take(id)).map((List<int> days)=> days.reduce((int curr, int next) => curr + next)).where((int sum)=>sum >= cumDays).toList().length;
     int monthID = 12 - backLen;
     print(monthID+1);
   }
@@ -80,7 +86,7 @@ class DateJP{
 }
 
 void test_MDD(){
-  print("This is Test!");
+  print("This is Test!\n\n");
   DateJP migd = new DateJP.fromString("6/18");
   DateJP migd2 = new DateJP.fromCumDays(migd.cumDays());
   print(migd2);
