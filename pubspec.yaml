@@ -1,0 +1,5 @@
+name: SCJ_MigdallyWorks
+desc: Calculation and Operations for some Migdally Works on SCJ
+
+environment:
+  sdk: ">=2.10.0 <3.0.0"
