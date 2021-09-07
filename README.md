@@ -5,11 +5,11 @@ Calculation and Operations for some Migdally Works on SCJ
 ## How to Use
 
 ```sh
-dart migdalDay.dart
+> dart migdalDay.dart
 ```
 
 for test running:
 
 ```sh
-dart migdalDay.dart -test
+> dart migdalDay.dart -test
 ```
