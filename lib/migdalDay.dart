@@ -41,20 +41,23 @@ void mainLT(){
   //累積日数を算出
   List<int> migdalCumDays = migdalDaysWithNotes.map((List<String> elm)=>elm[0]).map((String day)=> DateJP.fromString(day, isLeap)).map((DateJP date)=>date.cumDays()).toList();
   //各種統計値を取り整数に切り上げ
-  int migdalCumDaysMean = migdalCumDays.sMean().ceil();
-  int migdalCumDaysSD = migdalCumDays.sSD().ceil();
-  int migdalCumDaysMix35 = [migdalCumDaysMean,migdalCumDaysSD].mixtureOfTuple([3,5]).ceil();
+  double migdalCumDaysMean = migdalCumDays.sMean();
+  double migdalCumDaysSD = migdalCumDays.sSD();
+  double migdalCumDaysMix35 = [migdalCumDaysMean,migdalCumDaysSD].mixtureOfTuple([3,5]);
 
   //累積日数からコンストラクトし日付表記の文字列へ
-  String migdalDaysMean = (DateJP.fromCumDays(migdalCumDaysMean, isLeap)).toString();
-  String migdalDaysSD = (DateJP.fromCumDays(migdalCumDaysSD, isLeap)).toString();
-  String migdalDaysMix35 = (DateJP.fromCumDays(migdalCumDaysMix35, isLeap)).toString();
+  String migdalDaysMean = (DateJP.fromCumDays(migdalCumDaysMean.ceil(), isLeap)).toString();
+  String migdalDaysSD = (DateJP.fromCumDays(migdalCumDaysSD.ceil(), isLeap)).toString();
+  String migdalDaysMix35 = (DateJP.fromCumDays(migdalCumDaysMix35.ceil(), isLeap)).toString();
   //元データの表示
   print(migdalDaysWithNotes.toTableString(cap,borderd));
   print("\n");
   //各種統計値
   cap.add("記念日の各種統計値");
-  List<List<String>> migdalDaysStats =[["平均",migdalDaysMean],["標準偏差",migdalDaysSD],["平均:標準偏差=3:5",migdalDaysMix35]];
+  List<List<String>> migdalDaysStats =[
+    ["平均",migdalDaysMean,migdalCumDaysMean.toString()],
+    ["標準偏差",migdalDaysSD,migdalCumDaysSD.toString()],
+    ["平均:標準偏差=3:5",migdalDaysMix35,migdalCumDaysMix35.toString()]];
   print(migdalDaysStats.toTableString(cap,borderd));
   print("\n");
 }
